@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -73,6 +72,7 @@ public class ProductController {
         List<Product> products = productService.findByCategory(category);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
+
     @PostMapping("/find-by-ids")
     public ResponseEntity<List<Product>> getProductsByIds(@RequestBody List<Long> ids) {
         List<Product> products = productService.findProductsByIds(ids);

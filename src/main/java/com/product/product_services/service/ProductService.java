@@ -40,6 +40,7 @@ public class ProductService {
             product.setCategory(productDetails.getCategory());
             product.setPrice(productDetails.getPrice());
             product.setQuantity(productDetails.getQuantity());
+            product.setImageUrl(productDetails.getImageUrl()); // new
 
             return productRepository.save(product);
         } else {

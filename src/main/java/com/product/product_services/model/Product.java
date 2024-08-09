@@ -18,6 +18,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id ;
 
+
     private String name;
 
 
@@ -36,6 +37,11 @@ public class Product {
     @Column(nullable = false)
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+
+    // new
+    @Column(name = "image_url")
+    private String imageUrl; // New field for image URL
 
 
 
