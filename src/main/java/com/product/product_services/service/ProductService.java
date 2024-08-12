@@ -12,54 +12,61 @@ import java.util.Optional;
 
 @Service
 public class ProductService {
-    @Autowired
-    private ProductRepository productRepository;
+  @Autowired private ProductRepository productRepository;
 
-    public List<Product> findAll() {
-        return productRepository.findAll();
-    }
+  @Autowired private WebClientService webClientService;
 
-    public Optional<Product> findById(Long id) {
-        return productRepository.findById(id);
-    }
+  public List<Product> findAll() {
+    return productRepository.findAll();
+  }
 
-    public Product save(Product product) {
-        return productRepository.save(product);
-    }
+  public Optional<Product> findById(Long id) {
+    return productRepository.findById(id);
+  }
 
-    public void deleteById(Long id) {
-        productRepository.deleteById(id);
-    }
-    public Product updateProduct(Long id, Product productDetails) {
-        Optional<Product> productOptional = productRepository.findById(id);
+  public Product save(Product product) {
 
-        if (productOptional.isPresent()) {
-            Product product = productOptional.get();
-            product.setName(productDetails.getName());
-            product.setDescription(productDetails.getDescription());
-            product.setCategory(productDetails.getCategory());
-            product.setPrice(productDetails.getPrice());
-            product.setQuantity(productDetails.getQuantity());
-            product.setImageUrl(productDetails.getImageUrl()); // new
+    Product newProduct = productRepository.save(product);
+    webClientService.addProductToStore((int) product.getId(), 1, product.getQuantity());
 
-            return productRepository.save(product);
-        } else {
-            throw new RuntimeException("Product not found with id: " + id);
-        }
-    }
+    return newProduct;
+  }
 
-    public List<Product> findProductsCreatedBetween(LocalDateTime startDate, LocalDateTime endDate) {
-        return productRepository.findProductsCreatedBetween(startDate, endDate);
-    }
+  public void deleteById(Long id) {
+    productRepository.deleteById(id);
+  }
 
-    public List<Product> findProductsUpdatedBetween(LocalDateTime startDate, LocalDateTime endDate) {
-        return productRepository.findProductsUpdatedBetween(startDate, endDate);
-    }
-    public List<Product> findByCategory(String category) {
-        return productRepository.findByCategory(category);
-    }
+  public Product updateProduct(Long id, Product productDetails) {
+    Optional<Product> productOptional = productRepository.findById(id);
 
-    public List<Product> findProductsByIds(List<Long> ids ){
-        return productRepository.findByIdIn(ids);
+    if (productOptional.isPresent()) {
+      Product product = productOptional.get();
+      product.setName(productDetails.getName());
+      product.setDescription(productDetails.getDescription());
+      product.setCategory(productDetails.getCategory());
+      product.setPrice(productDetails.getPrice());
+      product.setQuantity(productDetails.getQuantity());
+      product.setImageUrl(productDetails.getImageUrl()); // new
+
+      return productRepository.save(product);
+    } else {
+      throw new RuntimeException("Product not found with id: " + id);
     }
+  }
+
+  public List<Product> findProductsCreatedBetween(LocalDateTime startDate, LocalDateTime endDate) {
+    return productRepository.findProductsCreatedBetween(startDate, endDate);
+  }
+
+  public List<Product> findProductsUpdatedBetween(LocalDateTime startDate, LocalDateTime endDate) {
+    return productRepository.findProductsUpdatedBetween(startDate, endDate);
+  }
+
+  public List<Product> findByCategory(String category) {
+    return productRepository.findByCategory(category);
+  }
+
+  public List<Product> findProductsByIds(List<Long> ids) {
+    return productRepository.findByIdIn(ids);
+  }
 }
